@@ -1,0 +1,14 @@
+This repository includes some examples to use OPENTUNER on PLASMA.
+Al the examples are in /opentuner/examples/
+dgemm_opentuner/
+dtrsm_opentuner/
+dsyrk_opentuner/
+dpotrf_opentuner/
+
+TO COMPILE:
+make
+
+TO RUN:
+python mmm_tuner.py --no-dups --stop-after=100
+
+
