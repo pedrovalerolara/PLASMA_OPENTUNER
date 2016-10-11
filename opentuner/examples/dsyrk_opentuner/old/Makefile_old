@@ -1,0 +1,33 @@
+C         =  gcc
+CFPIC     =  -fPIC
+CFLAGS    =  -fopenmp $(FPIC) -O3 -std=c99 -Wall -pedantic -Wshadow -Wno-unused
+LDFLAGS   =  -fopenmp $(FPIC)
+# options for MKL
+CFLAGS    += -DPLASMA_WITH_MKL \
+             -DMKL_Complex16="double _Complex" \
+             -DMKL_Complex8="float _Complex"
+INC       =  -I../include
+INC       += -I../test
+LIBS      =  -L$(MKLROOT)/lib -lmkl_intel_lp64 -lmkl_core -lmkl_sequential -lm
+INC       += -I$(MKLROOT)/include
+#INC       += -I$(LAPACKDIR)/LAPACKE/include -I$(CBLASDIR)/include
+#LIBS      += -L$(LAPACKDIR) -llapack -llapacke -L$(CBLASDIR)/lib -lcblas -lblas
+LIBS      += -L../lib -lplasma -lcoreblas
+
+
+all:
+
+	#$(CC) -c  $(INC) $(CFLAGS) $(LIBS) context.c     -o  context.o 
+	#$(CC) -c  $(INC) $(CFLAGS) $(LIBS) dcm2ccrb.c    -o  dcm2ccrb.o 
+	$(CC) -c  $(INC) $(CFLAGS) $(LIBS) core_dgemm.c  -o  core_dgemm.o 
+	$(CC) -c  $(INC) $(CFLAGS) $(LIBS) pdgemm.c      -o  pdgemm.o 
+	$(CC) -c  $(INC) $(CFLAGS) $(LIBS) dgemm.c       -o  dgemm.o 
+	#$(CC) -c  $(INC) $(CFLAGS) $(LIBS) test_dgemm.c  -o  test_dgemm.o 
+	#$(CC) context.o dcm2ccrb.o core_dgemm.o pdgemm.o dgemm.o test_dgemm.o $(INC) $(CFLAGS) $(LIBS) test.c -o  test 
+	#$(CC) core_dgemm.o pdgemm.o dgemm.o test_dgemm.o $(INC) $(CFLAGS) $(LIBS) test.c -o  test 
+	$(CC) core_dgemm.o pdgemm.o dgemm.o $(INC) $(CFLAGS) $(LIBS) test_opentuner.c -o  test 
+
+
+clean:
+	rm *.o
+	rm test
